@@ -51,8 +51,7 @@
         Twitter.Views.Twitts = Backbone.View.extend({
             tagName: config.twittsTagName,
             initialize: function () {
-
-
+                this.collection.on('reset', this.rebuild, this);
             },
             addOne: function () {
                 var twittView = new Twitter.Views.Twitt({model: model});
@@ -63,6 +62,11 @@
             },
             render: function () {
                 this.addAll();
+            } ,
+            //????
+            rebuild: function() {
+                this.$el.children().remove();
+                this.render();
             }
         })
     }

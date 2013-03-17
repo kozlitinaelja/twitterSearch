@@ -33,13 +33,13 @@
 
         Twitter.Models.Twitt = Backbone.Model.extend({});
 
-        Twitter.Views.Twitt = Backbone.Model.extend({
+        Twitter.Views.Twitt = Backbone.View.extend({
             tagName: config.twittTagName,
-            model: Twitter.Models.Twitt,
             template: Twitter.Helpers.template(config.twittTemplate),
             render: function () {
                 var template = this.template(this.model.toJSON());
                 this.$el.html(template);
+                return this;
             }
         });
 
@@ -47,8 +47,9 @@
             model: Twitter.Models.Twitt,
             url: "http://search.twitter.com/search.json",
             parse: function (responce) {
-                return responce.results;
+                return  responce.results;
             }
+
         });
 
         Twitter.Views.Twitts = Backbone.View.extend({
@@ -56,7 +57,7 @@
             initialize: function () {
                 this.collection.on('reset', this.rebuild, this);
             },
-            addOne: function () {
+            addOne: function (model) {
                 var twittView = new Twitter.Views.Twitt({model: model});
                 this.$el.append(twittView.render().el);
             },
@@ -65,6 +66,7 @@
             },
             render: function () {
                 this.addAll();
+                return this;
             },
             //????
             rebuild: function () {

@@ -17,8 +17,11 @@
 
         Twitter.options = {
             twittTemplate: "twitterTemplate",
+            searchTemplate: "searchTemplate",
             twittTagName: "li",
-            twittsTagName: "ul"
+            twittsTagName: "ul",
+            timeOut: 0,
+            searchDelay: 2000
         };
 
         var config = _.extend({}, Twitter.options, conf);
@@ -62,13 +65,50 @@
             },
             render: function () {
                 this.addAll();
-            } ,
+            },
             //????
-            rebuild: function() {
+            rebuild: function () {
                 this.$el.children().remove();
                 this.render();
             }
-        })
+        });
+
+        Twitter.Views.Search = Backbone.View.extend({
+            template: Twitter.Helpers.template("searchTemplate"),
+            events: {
+                'keyup #query': "searchTwitts"
+            },
+            searchTwitts: function () {
+                var self = this,
+                  value = this.$el.children("#query").val();
+
+                if (value.length >= 3) {
+                    if (config.timeOut) {
+                        clearTimeout(config.timeOut);
+                    }
+                    config.timeOut = setTimeout(function () {
+                        config.search = value;
+                        console.log(value);
+                        self.collection.fetch({cash: false, data: {q: config.search}, dataType: 'jsonp'})
+                    }, config.searchDelay);
+
+                }
+            },
+            render: function () {
+                this.$el.html(this.template());
+                return this;
+            }
+
+        });
+
+        //new instances of collection and collection view
+        var twitts = new Twitter.Collections.Twitts(),
+          twittsView = new Twitter.Views.Twitts({collection: twitts}),
+          queryView = new Twitter.Views.Search({collection: twitts});
+
+        //append search bar and search results
+        this.append(queryView.render().el);
+        this.append(twittsView.el);
     }
 
 }());

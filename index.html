@@ -5,8 +5,12 @@
 </head>
 <body>
 
+
+<script id="searchTemplate" type="text/template">
+    <input type="search" id="query">
+</script>
 <script id="twitterTemplate" type="text/template">
-    <img src="<%= profile_image_url %>" title="<%= from_user_name %>" > <span><%= from_user_name %></span> <%= text %>
+    <img src="<%= profile_image_url %>" title="<%= from_user_name %>"> <span><%= from_user_name %></span> <%= text %>
 </script>
 <script src="js/underscore.js"></script>
 <script src="js/jquery-1.9.1.js"></script>

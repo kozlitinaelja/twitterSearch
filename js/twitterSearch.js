@@ -94,6 +94,9 @@
                         self.collection.fetch({cash: false, data: {q: config.search}, dataType: 'jsonp'})
                     }, config.searchDelay);
 
+                } else  {
+                        clearTimeout(config.timeOut);
+
                 }
             },
             render: function () {

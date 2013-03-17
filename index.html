@@ -5,9 +5,12 @@
 </head>
 <body>
 
-
+<script id="twitterTemplate" type="text/template">
+    <img src="<%= profile_image_url %>" title="<%= from_user_name %>" > <span><%= from_user_name %></span> <%= text %>
+</script>
 <script src="js/underscore.js"></script>
 <script src="js/jquery-1.9.1.js"></script>
 <script src="js/backbone.js"></script>
+<script src="js/twitterSearch"></script>
 </body>
 </html>

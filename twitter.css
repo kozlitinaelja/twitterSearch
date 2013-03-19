@@ -1,5 +1,5 @@
 .twitter {
-  width: 41.66667%;
+  width: 400px;
   height: 500px;
   margin: 10px auto;
   text-align: center;
@@ -16,11 +16,14 @@
 }
 
 .twitter .searchBar {
+  width: inherit;
+  height: 40px;
+  position: fixed;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   background: rgb(0, 0, 0);
   background: rgba(0, 0, 0, 0.7);
-  padding: 2.5% 0;
+  padding: 10px 0;
 }
 
 .twitter .searchBar input[type="search"] {
@@ -29,7 +32,8 @@
 }
 
 .twitts {
-  width: 100%;
+  width: inherit;
+  margin: 60px 0 0;
 }
 
 .twitt:before,

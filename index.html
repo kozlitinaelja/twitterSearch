@@ -1,18 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title></title>
+  <title></title>
+  <link rel="stylesheet" href="reset.css">
+  <link rel="stylesheet" href="twitter.css">
+  <style>
+    body {
+      width: 100%;
+      max-width: 960px;
+      margin: auto;
+      background: #fff;
+    }
+  </style>
 </head>
 <body>
 
 <div class="twitter"></div>
 
-
 <script id="searchTemplate" type="text/template">
-    <input type="search" id="query">
+  <input type="search" id="query">
 </script>
 <script id="twitterTemplate" type="text/template">
-    <img src="<%= profile_image_url %>" title="<%= from_user_name %>"> <span><%= from_user_name %></span> <%= text %>
+  <img src="<%= profile_image_url %>" alt="<%= from_user_name %>">
+  <p><span><%= from_user_name %></span> <%= text %></p><a class="more" href="<%= url %>">more</a>
 </script>
 <script src="js/underscore.js"></script>
 <script src="js/jquery-1.9.1.js"></script>

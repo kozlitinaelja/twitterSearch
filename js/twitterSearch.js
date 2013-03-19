@@ -13,7 +13,6 @@
       Collections: {},
       Views: {},
       Helpers: {}
-      //Router ???
     };
 
     Twitter.options = {
@@ -23,7 +22,11 @@
       twittsTagName: "ul",
       timeOut: 0,
       searchDelay: 2000,
-      search: "monkeys"
+      search: "monkeys",
+      rpp: 5,
+      result_type: 'resent',
+      updateSpeed: 10000
+
     };
 
     var config = _.extend({}, Twitter.options, conf);
@@ -49,17 +52,19 @@
     Twitter.Collections.Twitts = Backbone.Collection.extend({
       model: Twitter.Models.Twitt,
       url: "http://search.twitter.com/search.json",
-      parse: function(responce) {
-        $.each(responce.results, this.formatTwitts);
-        return  responce.results;
+      parse: function(response) {
+        $.each(response.results, this.formatTwitts);
+        return  response.results;
       },
 
       formatTwitts: function(index, obj) {
         obj.text = obj.text.replace(/(http:[^\s]+)/g, ' <a href="$1">$1</a> ')
             .replace(/@([^\s:]+)/g, ' <a href="http://twitter.com/$1">@$1</a> ')
             .replace(/\s(#[^\s]+)/g, ' <a href="#">$1</a> ');
+
         obj.url = 'https://twitter.com/' + obj.from_user + '/status/' + obj.id_str;
       }
+
 
     });
 
@@ -67,7 +72,7 @@
       tagName: config.twittsTagName,
       className: "twitts",
       initialize: function() {
-        this.collection.on('reset', this.render, this);
+        this.collection.on('reset', this.rebuild, this);
       },
       addOne: function(model) {
         var twittView = new Twitter.Views.Twitt({model: model});
@@ -80,6 +85,11 @@
       render: function() {
         this.addAll();
         return this;
+      },
+      rebuild: function() {
+        var self= this;
+         this.render();
+
       }
     });
 
@@ -90,6 +100,11 @@
       events: {
         "keyup #query": "searchTwitts"
       },
+      updateResults: function(){
+        var self = this;
+        self.collection.fetch({cash: false, data: {q: config.search, rpp: config.rpp, result_type: config.result_type}, dataType: "jsonp", success: function(){setTimeout(function(){self.updateResults()}, config.updateSpeed)}});
+      } ,
+
       searchTwitts: function() {
         var self = this,
             value = this.$el.children("#query").val();
@@ -101,7 +116,7 @@
           config.timeOut = setTimeout(function() {
             config.search = value;
             console.log(value);
-            self.collection.fetch({cash: false, data: {q: config.search}, dataType: "jsonp"})
+            self.updateResults();
           }, config.searchDelay);
 
         } else {
@@ -119,7 +134,8 @@
     var twitts = new Twitter.Collections.Twitts(),
         twittsView = new Twitter.Views.Twitts({collection: twitts}),
         queryView = new Twitter.Views.Search({collection: twitts});
-    twitts.fetch({cash: false, data: {q: config.search}, dataType: "jsonp"})
+
+
     //append search bar and search results
     this.append(queryView.render().el);
     this.append(twittsView.el);

@@ -16,7 +16,7 @@
   position: relative;
 }
 
-.twitter .searchBar {
+.twitter .searchBar, .searchTitle {
   width: inherit;
   height: 40px;
   position: fixed;
@@ -28,7 +28,16 @@
   z-index: 3;
 }
 
-.twitter .searchBar input {
+.twitter .searchTitle {
+  display: none;
+  font-size: 2em;
+  line-height: 40px;
+  color: #FFF;
+  font-weight: 800;
+  letter-spacing: 0.3em;
+}
+
+.searchBar input[type="search"] {
   width: 90%;
   margin: 10px auto;
   outline: none;
@@ -56,6 +65,7 @@
   margin: 5px 0 0 0;
   text-align: left;
   position: relative;
+  cursor: pointer;
 }
 
 .twitt:hover {

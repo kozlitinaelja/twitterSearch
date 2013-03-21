@@ -14,10 +14,13 @@
 </head>
 <body>
 
-<div class="twitter"></div>
+<div class="twitter">
+  <h1 class="searchTitle"></h1>
+</div>
+
 
 <script id="searchTemplate" type="text/template">
-  <input id="query">
+  <input type="search" id="query" placeholder="What would you like to seach for?">
 </script>
 <script id="twitterTemplate" type="text/template">
   <img src="<%= profile_image_url %>" alt="<%= from_user_name %>">

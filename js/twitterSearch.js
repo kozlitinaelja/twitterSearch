@@ -21,12 +21,15 @@
       twittTagName: "li",
       twittsTagName: "ul",
       timeOut: 0,
-      searchDelay: 2000,
-      search: "monkeys",
+      searchDelay: 1000,
+      search: "monkey",
       rpp: 30,
       result_type: 'recent',
       updateSpeed: 20000,
-      timedDelay: 0
+      timedDelay: 0,
+      searchBar: true,
+      fadeEffect: true,
+      current: 0
 
     };
 
@@ -96,6 +99,24 @@
         obj.time = Twitter.Helpers.FormatDate(obj.created_at);
 
 
+      },
+      updateResults: function() {
+        var self = this;
+        self.fetch({cash: false,
+          data: {
+            q: '@' + config.search,
+            rpp: config.rpp,
+            result_type: config.result_type,
+            page: config.page
+          },
+          dataType: "jsonp",
+
+          success: function() {
+            clearTimeout(config.timedDelay);
+            setTimeout(function() {
+              self.updateResults()
+            }, config.updateSpeed);
+          }});
       }
 
 
@@ -112,6 +133,7 @@
         this.$el.append(twittView.render().el);
       },
       addAll: function() {
+        config.current = 0;
         this.$el.empty();
         this.collection.forEach(this.addOne, this)
       },
@@ -121,21 +143,43 @@
         setTimeout(function() {self.twittsAnimation()}, 600);
         return this;
       },
+      events: {
+       'mouseenter .twitt': function(e) {clearTimeout(config.timedDelay);},
+       'mouseleave .twitt': "go"
+      },
+      go: function() {
+        this.twittsAnimation(config.current);
+    },
       twittsAnimation: function(val) {
 
       var self = this, curr = (val) ? val : 0, len = self.$el.children('li').length,
           height, $elem = self.$el.children('li').eq(curr);
 
+        if(config.fadeEffect){
+
       $elem.animate({opacity: 0}, 600, function() {
         height = $elem.outerHeight();
         $elem.animate({marginTop: - height}, 600);
         if(++curr < len){
+          config.current = curr;
           clearTimeout(config.timedDelay);
           config.timedDelay = setTimeout(function(){self.twittsAnimation(curr)}, 900);
         } else {
           clearTimeout(config.timedDelay);
+
         }
       }) ;
+        } else {
+          height = $elem.outerHeight();
+          $elem.animate({marginTop: - height}, 600, function(){
+            if(++curr < len){
+              clearTimeout(config.timedDelay);
+              config.timedDelay = setTimeout(function(){self.twittsAnimation(curr)}, 900);
+            } else {
+              clearTimeout(config.timedDelay);
+            }
+          });
+        }
 
     }
 
@@ -147,38 +191,21 @@
       className: "searchBar",
       events: {
         "keyup #query": "searchTwitts",
-        "keypress #query": function(e){if(e.which == 13) {e.preventDefault()}}
-      },
-      updateResults: function() {
-        var self = this;
-        self.collection.fetch({cash: false,
-          data: {
-            q: '@' + config.search,
-            rpp: config.rpp,
-            result_type: config.result_type,
-            page: config.page
-          },
-          dataType: "jsonp",
-
-          success: function() {
-            clearTimeout(config.timedDelay);
-            setTimeout(function() {
-              self.updateResults()
-            }, config.updateSpeed);
-          }});
+        "keypress #query": "searchTwitts"
       },
 
-      searchTwitts: function() {
+
+      searchTwitts: function(e) {
         var self = this,
             value = this.$el.children("#query").val();
-
+        if(e.which == 13) {e.preventDefault()}
         if (value.length >= 3) {
           if (config.timeOut) {
             clearTimeout(config.timeOut);
           }
           config.timeOut = setTimeout(function() {
             config.search = value;
-            self.updateResults();
+            self.collection.updateResults();
           }, config.searchDelay);
 
         } else {
@@ -198,7 +225,17 @@
 
 
     //append search bar and search results
+    if (config.searchBar){
     this.append(queryView.render().el);
+    }
+    else {
+      var title = config.search,
+          firstLetter = title.charAt(0).toUpperCase();
+      title = title.replace(/^\w/, firstLetter);
+      $('h1.searchTitle').html(title).show();
+      twitts.updateResults();
+    }
+
     this.append(twittsView.el);
 
     return this;

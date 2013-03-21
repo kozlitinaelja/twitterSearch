@@ -24,7 +24,7 @@
       searchDelay: 2000,
       search: "monkeys",
       rpp: 5,
-      result_type: 'resent',
+      result_type: 'recent',
       updateSpeed: 10000
 
     };
@@ -34,6 +34,32 @@
     //helper method to get template
     Twitter.Helpers.template = function(id) {
       return _.template($("#" + id).html())
+    };
+
+    Twitter.Helpers.FormatDate = function(str) {
+      var date, dif, difDay, time, now;
+
+      date = (new Date(str)).getTime();
+      now = (new Date()).getTime();
+      dif = Math.round((now - date) / 1000);
+      difDay = Math.floor(dif / 86400);
+
+      if (isNaN(difDay) || difDay < 0 || difDay > 31) {
+        return
+      }
+
+      time = (difDay === 0) ? (dif < 60) && 'just now' ||
+          (dif < 120) && 'minute ago' ||
+          (dif < 3600) && (Math.floor(dif / 60) + ' minutes ago') ||
+          (dif < 7200) && 'hour ago' ||
+          (dif < 86400) && (Math.floor(dif / (60 * 60)) + ' hours ago') :
+          (difDay === 1) && 'one day ago' ||
+              (difDay < 7) && difDay + ' days ago' ||
+              (difDay < 14) && 'one week ago' ||
+              (difDay < 31) && (Math.floor(difDay / 7) + ' weeks ago');
+
+      return time;
+
     };
 
     Twitter.Models.Twitt = Backbone.Model.extend({});
@@ -53,16 +79,22 @@
       model: Twitter.Models.Twitt,
       url: "http://search.twitter.com/search.json",
       parse: function(response) {
+        console.log(response.results);
         $.each(response.results, this.formatTwitts);
         return  response.results;
       },
 
       formatTwitts: function(index, obj) {
+
         obj.text = obj.text.replace(/(http:[^\s]+)/g, ' <a href="$1">$1</a> ')
             .replace(/@([^\s:]+)/g, ' <a href="http://twitter.com/$1">@$1</a> ')
             .replace(/\s(#[^\s]+)/g, ' <a href="#">$1</a> ');
 
         obj.url = 'https://twitter.com/' + obj.from_user + '/status/' + obj.id_str;
+
+        obj.time = Twitter.Helpers.FormatDate(obj.created_at);
+
+
       }
 
 
@@ -72,7 +104,7 @@
       tagName: config.twittsTagName,
       className: "twitts",
       initialize: function() {
-        this.collection.on('reset', this.rebuild, this);
+        this.collection.on('reset', this.render, this);
       },
       addOne: function(model) {
         var twittView = new Twitter.Views.Twitt({model: model});
@@ -85,11 +117,6 @@
       render: function() {
         this.addAll();
         return this;
-      },
-      rebuild: function() {
-        var self= this;
-         this.render();
-
       }
     });
 
@@ -100,10 +127,23 @@
       events: {
         "keyup #query": "searchTwitts"
       },
-      updateResults: function(){
+      updateResults: function() {
         var self = this;
-        self.collection.fetch({cash: false, data: {q: config.search, rpp: config.rpp, result_type: config.result_type}, dataType: "jsonp", success: function(){setTimeout(function(){self.updateResults()}, config.updateSpeed)}});
-      } ,
+        self.collection.fetch({cash: false,
+          data: {
+            q: '@' + config.search,
+            rpp: config.rpp,
+            result_type: config.result_type,
+            page: config.page
+          },
+          dataType: "jsonp",
+
+          success: function() {
+            setTimeout(function() {
+              self.updateResults()
+            }, config.updateSpeed)
+          }});
+      },
 
       searchTwitts: function() {
         var self = this,

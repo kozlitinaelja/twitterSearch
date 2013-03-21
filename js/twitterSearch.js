@@ -23,9 +23,10 @@
       timeOut: 0,
       searchDelay: 2000,
       search: "monkeys",
-      rpp: 5,
+      rpp: 30,
       result_type: 'recent',
-      updateSpeed: 10000
+      updateSpeed: 20000,
+      timedDelay: 0
 
     };
 
@@ -49,13 +50,13 @@
       }
 
       time = (difDay === 0) ? (dif < 60) && 'just now' ||
-          (dif < 120) && 'minute ago' ||
-          (dif < 3600) && (Math.floor(dif / 60) + ' minutes ago') ||
-          (dif < 7200) && 'hour ago' ||
+          (dif < 120) && '1 min ago' ||
+          (dif < 3600) && (Math.floor(dif / 60) + ' min ago') ||
+          (dif < 7200) && 'an hour ago' ||
           (dif < 86400) && (Math.floor(dif / (60 * 60)) + ' hours ago') :
           (difDay === 1) && 'one day ago' ||
               (difDay < 7) && difDay + ' days ago' ||
-              (difDay < 14) && 'one week ago' ||
+              (difDay < 14) && 'a week ago' ||
               (difDay < 31) && (Math.floor(difDay / 7) + ' weeks ago');
 
       return time;
@@ -115,17 +116,38 @@
         this.collection.forEach(this.addOne, this)
       },
       render: function() {
+        var self = this;
         this.addAll();
+        setTimeout(function() {self.twittsAnimation()}, 600);
         return this;
-      }
-    });
+      },
+      twittsAnimation: function(val) {
+
+      var self = this, curr = (val) ? val : 0, len = self.$el.children('li').length,
+          height, $elem = self.$el.children('li').eq(curr);
+
+      $elem.animate({opacity: 0}, 600, function() {
+        height = $elem.outerHeight();
+        $elem.animate({marginTop: - height}, 600);
+        if(++curr < len){
+          clearTimeout(config.timedDelay);
+          config.timedDelay = setTimeout(function(){self.twittsAnimation(curr)}, 900);
+        } else {
+          clearTimeout(config.timedDelay);
+        }
+      }) ;
+
+    }
+
+  });
 
     Twitter.Views.Search = Backbone.View.extend({
       tagName: 'form',
       template: Twitter.Helpers.template("searchTemplate"),
       className: "searchBar",
       events: {
-        "keyup #query": "searchTwitts"
+        "keyup #query": "searchTwitts",
+        "keypress #query": function(e){if(e.which == 13) {e.preventDefault()}}
       },
       updateResults: function() {
         var self = this;
@@ -139,9 +161,10 @@
           dataType: "jsonp",
 
           success: function() {
+            clearTimeout(config.timedDelay);
             setTimeout(function() {
               self.updateResults()
-            }, config.updateSpeed)
+            }, config.updateSpeed);
           }});
       },
 
@@ -155,7 +178,6 @@
           }
           config.timeOut = setTimeout(function() {
             config.search = value;
-            console.log(value);
             self.updateResults();
           }, config.searchDelay);
 
@@ -167,7 +189,6 @@
         this.$el.html(this.template());
         return this;
       }
-
     });
 
     //new instances of collection and collection view

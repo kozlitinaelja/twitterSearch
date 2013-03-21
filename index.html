@@ -17,11 +17,11 @@
 <div class="twitter"></div>
 
 <script id="searchTemplate" type="text/template">
-  <input type="search" id="query">
+  <input id="query">
 </script>
 <script id="twitterTemplate" type="text/template">
   <img src="<%= profile_image_url %>" alt="<%= from_user_name %>">
-  <span class="userName"><%= from_user_name %></span> <span class="twittTime"><%= time %></span><p><%= text %></p><a class="more" href="<%= url %>">more</a>
+  <span class="userName"><%= from_user_name %></span> <span class="twittTime"><%= time %></span><p><%= text %> (<a class="more" href="<%= url %>">more</a>)</p>
 </script>
 <script src="js/underscore.js"></script>
 <script src="js/jquery-1.9.1.js"></script>

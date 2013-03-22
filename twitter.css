@@ -12,7 +12,7 @@
   border-radius: 10px;
   color: #000;
   color: rgba(0, 0, 0, 0.7);
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 0 0 4px rgb(0, 0, 0);
   position: relative;
 }
 
@@ -20,8 +20,6 @@
   width: inherit;
   height: 40px;
   position: absolute;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
   background: rgb(0, 0, 0);
   padding: 10px 0;
   z-index: 3;

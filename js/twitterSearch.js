@@ -35,7 +35,13 @@
 
     };
 
-    var config = _.extend({}, Twitter.options, conf);
+    var config;
+
+    if(typeof conf === "string") {
+      config = _.extend({}, Twitter.options, {search: conf});
+    } else {
+    config = _.extend({}, Twitter.options, conf);
+    }
 
     //helper method to get template
     Twitter.Helpers.template = function(id) {

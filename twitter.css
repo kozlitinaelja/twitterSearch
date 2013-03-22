@@ -19,11 +19,10 @@
 .twitter .searchBar, .searchTitle {
   width: inherit;
   height: 40px;
-  position: fixed;
+  position: absolute;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   background: rgb(0, 0, 0);
-  background: rgba(0, 0, 0, 0.7);
   padding: 10px 0;
   z-index: 3;
 }
@@ -88,8 +87,8 @@
 }
 
 .twitt .userName {
-  font-size: 1.2857429em;
-  font-weight: 800;
+  font-size: 1.1em;
+  font-weight: 900;
   margin-left: 58px;
 }
 .twitt .twittTime {

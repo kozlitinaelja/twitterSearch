@@ -37,15 +37,15 @@
       message: "No results were found. Try something else"
     };
 
-    if(typeof conf === "string") {
+    if (typeof conf === "string") {
       config = _.extend({}, Twitter.options, {search: conf});
     } else {
-    config = _.extend({}, Twitter.options, conf);
+      config = _.extend({}, Twitter.options, conf);
     }
 
     //helper method to get template
     Twitter.Helpers.template = function(id) {
-      return _.template($("#" + id).html())
+      return _.template($("#" + id).html());
     };
 
     Twitter.Helpers.FormatDate = function(str) {
@@ -57,17 +57,18 @@
       difDay = Math.floor(dif / 86400);
 
       if (isNaN(difDay) || difDay < 0 || difDay > 31) {
-        return;}
+        return;
+      }
 
-      time = (difDay === 0) ? (dif < 60) && 'just now' ||
-          (dif < 120) && '1 min ago' ||
-          (dif < 3600) && (Math.floor(dif / 60) + ' min ago') ||
-          (dif < 7200) && 'an hour ago' ||
-          (dif < 86400) && (Math.floor(dif / 3600) + ' hours ago') :
-          (difDay === 1) && 'one day ago' ||
-              (difDay < 7) && difDay + ' days ago' ||
-              (difDay < 14) && 'a week ago' ||
-              (difDay < 31) && (Math.floor(difDay / 7) + ' weeks ago');
+      time = (difDay === 0) ? ((dif < 60) && 'just now') ||
+          ((dif < 120) && '1 min ago') ||
+          ((dif < 3600) && (Math.floor(dif / 60) + ' min ago')) ||
+          ((dif < 7200) && 'an hour ago') ||
+          ((dif < 86400) && (Math.floor(dif / 3600) + ' hours ago')) :
+          ((difDay === 1) && 'one day ago' ) ||
+              ((difDay < 7) && difDay + ' days ago') ||
+              ((difDay < 14) && 'a week ago') ||
+              ((difDay < 31) && (Math.floor(difDay / 7) + ' weeks ago'));
 
       return time;
 
@@ -117,17 +118,17 @@
           dataType: "jsonp",
 
           success: function() {
-            if(!self.length) {
+            if (!self.length) {
               self.trigger('noResults');
             }
             clearTimeout(config.animationTimeout);
             setTimeout(function() {
-              self.updateResults()
+              self.updateResults();
             }, config.updateDelay);
           },
           error: function() {
             $('.errorMessage').remove();
-            $('<p></p>', {"class":'errorMessage'}).text("Something wrong. Try again").appendTo(container);
+            $('<p></p>', {"class": 'errorMessage'}).text("Something wrong. Try again").appendTo(container);
           }
         });
       }
@@ -151,21 +152,21 @@
       addAll: function() {
         config.current = 0;
         this.$el.empty();
-        this.collection.forEach(this.addOne, this)
+        this.collection.forEach(this.addOne, this);
       },
       render: function() {
         var self = this;
         this.addAll();
         setTimeout(function() {
-          self.twittsAnimation(0)
+          self.twittsAnimation();
         }, 2000);
         return this;
       },
 
       noResults: function() {
         var self = this;
-          $('.errorMessage').remove();
-          $('<p></p>', {"class":'errorMessage'}).text(config.message).appendTo(container);
+        $('.errorMessage').remove();
+        $('<p></p>', {"class": 'errorMessage'}).text(config.message).appendTo(container);
       },
 
       startAnimation: function(e) {
@@ -178,16 +179,18 @@
 
       twittsAnimation: function(val) {
 
-        var self = this, curr = (val) ? val : 0,
+        var self = this, curr = val || 0,
             len = self.$el.children('li').length,
             $elem = self.$el.children('li').eq(curr),
             height = $elem.outerHeight();
-        if (len < 2) {return}
+        if (len < 2) {
+          return;
+        }
 
         if (config.fadeEffect) {
           $elem.animate({opacity: 0}, config.animationSpeed, function() {
             $elem.animate({marginTop: -height}, config.animationSpeed);
-          })
+          });
         }
         else {
           $elem.animate({marginTop: -height}, config.animationSpeed, function() {
@@ -197,11 +200,11 @@
         if (++curr < len) {
           config.current = curr;
           config.animationTimeout = setTimeout(function() {
-            self.twittsAnimation(curr)
+            self.twittsAnimation(curr);
           }, config.animationDelay);
         } else {
           self.stopAnimation();
-           self.collection.updateResults();
+          self.collection.updateResults();
         }
       }
 
@@ -213,15 +216,18 @@
       className: "searchBar",
       events: {
         "keyup #query": "searchTwitts",
-        "keypress #query": "searchTwitts"
+        "keypress #query": "searchTwitts",
+        "focus #query": function() {
+          $("#query").val('');
+        }
       },
 
 
       searchTwitts: function(e) {
         var self = this,
-            value = this.$el.children("#query").val();
+            value = $("#query").val();
         if (e.which === 13) {
-          e.preventDefault()
+          e.preventDefault();
         }
         if (value.length >= 3) {
           if (config.searchTimeout) {
@@ -242,31 +248,35 @@
       }
     });
 
-    //new instances of collection and collection view
-    var twitts = new Twitter.Collections.Twitts(),
-        twittsView = new Twitter.Views.Twitts({collection: twitts}),
-        queryView = new Twitter.Views.Search({collection: twitts});
+    Twitter.Views.Twitter = Backbone.View.extend({
+      initialize: function() {
+        //new instances of collection and collection view
+        var title, firstLetter,
+            twitts = new Twitter.Collections.Twitts(),
+            twittsView = new Twitter.Views.Twitts({collection: twitts}),
+            queryView = new Twitter.Views.Search({collection: twitts});
 
-
-    //append search bar and search results
-    if (config.searchBar) {
-      this.append(queryView.render().el);
-    }
-    else {
-      var title = config.search,
+        //append search bar and search results
+        if (config.searchBar) {
+          container.append(queryView.render().el);
+        }
+        else {
+          title = config.search;
           firstLetter = title.charAt(0).toUpperCase();
-      title = title.replace(/^\w/, firstLetter);
-      $('h1.searchTitle').html(title).show();
-      twitts.updateResults();
-    }
+          title = title.replace(/^\w/, firstLetter);
+          $('h1.searchTitle').html(title).show();
+          twitts.updateResults();
+        }
+        container.append(twittsView.el);
+      }
+    });
 
-    this.append(twittsView.el);
+    var twitter = new Twitter.Views.Twitter();
 
     return this;
-  }
-
+  };
 
 
 }(jQuery, window, document));
 
-$('div.twitter').twitterSearch();
+$('div.twitter').twitterSearch("internet");

@@ -6,14 +6,16 @@
  * To change this template use File | Settings | File Templates.
  */
 ;
-(function() {
+(function($, window, document, undefined) {
   $.fn.twitterSearch = function(conf) {
-    var Twitter = {
-      Models: {},
-      Collections: {},
-      Views: {},
-      Helpers: {}
-    };
+    var container = this,
+        config,
+        Twitter = {
+          Models: {},
+          Collections: {},
+          Views: {},
+          Helpers: {}
+        };
 
     Twitter.options = {
       twittTemplate: "twitterTemplate",
@@ -24,18 +26,16 @@
       animationTimeout: 0,
       searchDelay: 1000,
       updateDelay: 20000,
-      animationSpeed: 600,
-      animationDelay: 900,
+      animationSpeed: 500,
+      animationDelay: 1500,
       search: "USA",
       rpp: 30,
       result_type: 'recent',
-      searchBar: false,
+      searchBar: true,
       fadeEffect: false,
-      current: 0
-
+      current: 0,
+      message: "No results were found. Try something else"
     };
-
-    var config;
 
     if(typeof conf === "string") {
       config = _.extend({}, Twitter.options, {search: conf});
@@ -57,8 +57,7 @@
       difDay = Math.floor(dif / 86400);
 
       if (isNaN(difDay) || difDay < 0 || difDay > 31) {
-        return;
-      }
+        return;}
 
       time = (difDay === 0) ? (dif < 60) && 'just now' ||
           (dif < 120) && '1 min ago' ||
@@ -102,14 +101,13 @@
             .replace(/\s(#[^\s]+)/g, ' <a href="#">$1</a> ');
 
         obj.url = 'https://twitter.com/' + obj.from_user + '/status/' + obj.id_str;
-
         obj.time = Twitter.Helpers.FormatDate(obj.created_at);
-
-
       },
+
       updateResults: function() {
         var self = this;
-        self.fetch({cash: false,
+        self.fetch({
+          cash: false,
           data: {
             q: '@' + config.search,
             rpp: config.rpp,
@@ -119,11 +117,19 @@
           dataType: "jsonp",
 
           success: function() {
+            if(!self.length) {
+              self.trigger('noResults');
+            }
             clearTimeout(config.animationTimeout);
             setTimeout(function() {
               self.updateResults()
             }, config.updateDelay);
-          }});
+          },
+          error: function() {
+            $('.errorMessage').remove();
+            $('<p></p>', {"class":'errorMessage'}).text("Something wrong. Try again").appendTo(container);
+          }
+        });
       }
 
 
@@ -134,6 +140,11 @@
       className: "twitts",
       initialize: function() {
         this.collection.on('reset', this.render, this);
+        this.collection.on('noResults', this.noResults, this);
+      },
+      events: {
+        'mouseover': "stopAnimation",
+        'mouseleave': "startAnimation"
       },
       addOne: function(model) {
         var twittView = new Twitter.Views.Twitt({model: model});
@@ -149,12 +160,14 @@
         this.addAll();
         setTimeout(function() {
           self.twittsAnimation(0)
-        }, 600);
+        }, 2000);
         return this;
       },
-      events: {
-        'mouseover': "stopAnimation",
-        'mouseleave': "startAnimation"
+
+      noResults: function() {
+        var self = this;
+          $('.errorMessage').remove();
+          $('<p></p>', {"class":'errorMessage'}).text(config.message).appendTo(container);
       },
 
       startAnimation: function(e) {
@@ -169,10 +182,9 @@
 
         var self = this, curr = (val) ? val : 0,
             len = self.$el.children('li').length,
-            height,
-            $elem = self.$el.children('li').eq(curr);
-
-        height = $elem.outerHeight();
+            $elem = self.$el.children('li').eq(curr),
+            height = $elem.outerHeight();
+        if (len < 2) {return}
 
         if (config.fadeEffect) {
           $elem.animate({opacity: 0}, config.animationSpeed, function() {
@@ -184,8 +196,6 @@
             $elem.css({opacity: 0});
           });
         }
-
-
         if (++curr < len) {
           config.current = curr;
           config.animationTimeout = setTimeout(function() {
@@ -193,9 +203,8 @@
           }, config.animationDelay);
         } else {
           self.stopAnimation();
+           self.collection.updateResults();
         }
-
-
       }
 
     });
@@ -258,6 +267,8 @@
     return this;
   }
 
-}());
+
+
+}(jQuery, window, document));
 
 $('div.twitter').twitterSearch();

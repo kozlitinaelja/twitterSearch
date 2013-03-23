@@ -131,8 +131,6 @@
           }
         });
       }
-
-
     });
 
     Twitter.Views.Twitts = Backbone.View.extend({

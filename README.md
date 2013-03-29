@@ -17,9 +17,10 @@ Download [default styling](https://github.com/kozlitinaelja/twitterSearch/blob/m
 
 Add in your html file:
 `
+
     &lt;div class="twitter"&gt;&lt;/div&gt;
     
-    &lt;script src="js/underscore.js"&gt;&lt;/script&gt;
+    <script src="js/underscore.js"></script>
     
     &lt;script src="js/jquery-1.9.1.js"&gt;&lt;/script&gt;
     

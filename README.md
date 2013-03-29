@@ -18,12 +18,19 @@ Download [default styling](https://github.com/kozlitinaelja/twitterSearch/blob/m
 Add in your html file:
 `
   &lt;div class="twitter"&rt;&lt;/div&rt;
+  
   &lt;script src="js/underscore.js"&rt;&lt;/script&rt;
+  
   &lt;script src="js/jquery-1.9.1.js"&rt;&lt;/script&rt;
+  
   &lt;script src="js/backbone.js"&rt;&lt;/script&rt;
+  
   &lt;script src="js/twitterSearch.js"&rt;&lt;/script&rt;
+  
   &lt;script&rt;
+  
     $("div.twitter").twitterSearch({search: "CNN", searchBar: false});
+    
   &lt;/script&rt;`
 Usage
 ============================

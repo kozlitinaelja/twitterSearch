@@ -58,7 +58,7 @@ Twitter search plugin provides jQuery collection method `$.fn.twitterSearch(opti
 
 ### Options you can override:
 
-*searchBar:*Set true if you want to provide to your users ability to search frequently;
+*searchBar:* Set true if you want to provide to your users ability to search frequently;
 
 *placeholder:* If you set true to searchBar, you might want to provide an example search;
 

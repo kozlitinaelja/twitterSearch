@@ -6,22 +6,22 @@ Twitter search plugin for working with Twitter Search API to get twitts correspo
 Includes different transition effects, pause-on-hover and auto-update features.
 Getting Started
 ==================================================
-Downloaddependence files: [underscore.js](http://underscorejs.org/) , [backbone.js](http://backbonejs.org/), [jquery-1.9.1.js](http://jquery.com/)
+Downloaddependence files: [underscore.js](http://underscorejs.org/) , [backbone.js](http://backbonejs.org/), [jquery-1.9.1.js](http://jquery.com/);
 
-Download the [production version](#) or [development version](https://github.com/kozlitinaelja/twitterSearch/blob/master/js/twitterSearch.js) of twitter search plugin
+Download the [production version](#) or [development version](https://github.com/kozlitinaelja/twitterSearch/blob/master/js/twitterSearch.js) of twitter search plugin;
 
-Download [default styling](https://github.com/kozlitinaelja/twitterSearch/blob/master/twitter.css)
+Download [default styling](https://github.com/kozlitinaelja/twitterSearch/blob/master/twitter.css);
 
 Add in your html file:
 
     
-    <div class="twitter"></div>;
+    <div class="twitter"></div>
     
     <script src="js/underscore.js"></script>
     
-    <script src="js/jquery-1.9.1.js"></script>;
+    <script src="js/jquery-1.9.1.js"></script>
     
-    <script src="js/backbone.js"></script>;
+    <script src="js/backbone.js"></script>
     
     <script src="js/twitterSearch.js"></script>
     

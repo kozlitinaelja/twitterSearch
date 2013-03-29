@@ -18,8 +18,8 @@
         };
 
     Twitter.options = {
-      twittTemplate: "twitterTemplate",
-      searchTemplate: "searchTemplate",
+      twittTemplate: '<img src="<%= profile_image_url %>" alt="<%= from_user_name %>"><span class="userName"><%= from_user_name %></span> <span class="twittTime"><%= time %></span><p><%= text %> (<a class="more" href="<%= url %>">more</a>)</p>',
+      searchTemplate: '<input type="search" id="query" placeholder="What would you like to seach for?">',
       twittTagName: "li",
       twittsTagName: "ul",
       searchTimeout: 0,
@@ -27,18 +27,21 @@
       searchDelay: 1000,
       updateDelay: 20000,
       animationSpeed: 500,
-      animationDelay: 1500,
-      search: "USA",
+      animationDelay: 1000,
+      search: "",
       rpp: 30,
       result_type: 'recent',
       searchBar: true,
       fadeEffect: false,
       current: 0,
-      message: "No results were found. Try something else"
+      message: "No results were found. Try something else",
+      from: "",
+      to: "",
+      placeholder: ""
     };
 
     if (typeof conf === "string") {
-      config = _.extend({}, Twitter.options, {search: conf});
+      config = _.extend({}, Twitter.options, {search: conf, searchBar:false});
     } else {
       config = _.extend({}, Twitter.options, conf);
     }
@@ -79,7 +82,7 @@
     Twitter.Views.Twitt = Backbone.View.extend({
       tagName: config.twittTagName,
       className: "twitt",
-      template: Twitter.Helpers.template(config.twittTemplate),
+      template: _.template(config.twittTemplate),
       render: function() {
         var template = this.template(this.model.toJSON());
         this.$el.html(template);
@@ -110,10 +113,13 @@
         self.fetch({
           cash: false,
           data: {
-            q: '@' + config.search,
             rpp: config.rpp,
             result_type: config.result_type,
-            page: config.page
+            page: config.page,
+            include_entities:true,
+            q: '@' + config.search,
+            from: config.from,
+            to: config.to
           },
           dataType: "jsonp",
 
@@ -183,9 +189,6 @@
             len = self.$el.children('li').length,
             $elem = self.$el.children('li').eq(curr),
             height = $elem.outerHeight();
-        if (len < 2) {
-          return;
-        }
 
         if (config.fadeEffect) {
           $elem.animate({opacity: 0}, config.animationSpeed, function() {
@@ -212,7 +215,7 @@
 
     Twitter.Views.Search = Backbone.View.extend({
       tagName: 'form',
-      template: Twitter.Helpers.template("searchTemplate"),
+      template: _.template(config.searchTemplate),
       className: "searchBar",
       events: {
         "keyup #query": "searchTwitts",
@@ -261,14 +264,20 @@
           container.append(queryView.render().el);
         }
         else {
-          title = config.search;
+          title = config.search || config.from || config.to;
           firstLetter = title.charAt(0).toUpperCase();
           title = title.replace(/^\w/, firstLetter);
-          $('h1.searchTitle').html(title).show();
+          $("<h1></h1>").addClass("searchTitle").html(title).appendTo(container).show();
           twitts.updateResults();
         }
         container.append(twittsView.el);
+        if(config.placeholder){
+          config.search = config.placeholder;
+          $('#query').val(config.search);
+          twitts.updateResults();
+        }
       }
+
     });
 
     var twitter = new Twitter.Views.Twitter();
@@ -279,4 +288,5 @@
 
 }(jQuery, window, document));
 
-$('div.twitter').twitterSearch("internet");
+
+$('div.twitter').twitterSearch({search: "internet", searchBar: false});

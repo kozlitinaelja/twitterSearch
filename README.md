@@ -53,16 +53,27 @@ You can find some examples at [twitter search examples](hhtp://kozlitinaelja.git
 Documentation
 ===========================
 Twitter search plugin provides jQuery collection method `$.fn.twitterSearch(options)`
+
 *options:* string or objects defines search criteria and configuration
+
 ### Options you can override:
+
 *searchBar:*Set true if you want to provide to your users ability to search frequently;
+
 *placeholder:* If you set true to searchBar, you might want to provide an example search;
+
 *fadeEffect:* Set true to use FadeOut effect during the animation process;
+
 *search:* term you want to search for;
+
 *from:* sent from the user;
+
 *to:* sent to the user;
+
 *rpp:* The number of tweets to return per page, up to a max of 100;
-*result_type:* Optional. Specifies what type of search results you would prefer to receive. The current default is "recent." Valid values include: "mixed", "recent", "popular"
+
+*result_type:* Optional. Specifies what type of search results you would prefer to receive. The current default is "recent." Valid values include: "mixed", "recent", "popular".
+
 Authors
 =============================
 <a href="https://github.com/kozlitinaelja">Elnara Kozlitina</a>

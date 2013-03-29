@@ -1,8 +1,5 @@
-twitterSearch
+Twitter Search Plugin using jQuery and Backbone
 =============
-
-
-# Twitter Search Plugin using jQuery and Backbone
 
 Twitter search plugin for working with Twitter Search API to get twitts correspond to the search  criteria on websites.
 `$.fn.twitterSearch()` creates an `ul` list of twitts and appends them to the DOM. Also appends a header with a query or a search bar which allows your users search for different twitts frequently.

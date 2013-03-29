@@ -68,7 +68,7 @@ There are a lot of options can be specified by passing a configuration object in
     
 Examples
 ===========================
-You can find some examples at [twitter search examples](hhtps://kozlitinaelja.github.com/twitterSearch.html)
+You can find some examples at [twitter search examples](http://kozlitinaelja.github.com/twitterSearch.html)
 Documentation
 ===========================
 Twitter search plugin provides jQuery collection method `$.fn.twitterSearch(options)`

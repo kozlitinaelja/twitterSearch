@@ -17,21 +17,21 @@ Download [default styling](https://github.com/kozlitinaelja/twitterSearch/blob/m
 
 Add in your html file:
 `
-  &lt;div class="twitter"&rt;&lt;/div&rt;
+  &lt;div class="twitter"&gt;&lt;/div&gt;
   
-  &lt;script src="js/underscore.js"&rt;&lt;/script&rt;
+  &lt;script src="js/underscore.js"&gt;&lt;/script&gt;
   
-  &lt;script src="js/jquery-1.9.1.js"&rt;&lt;/script&rt;
+  &lt;script src="js/jquery-1.9.1.js"&gt;&lt;/script&gt;
   
-  &lt;script src="js/backbone.js"&rt;&lt;/script&rt;
+  &lt;script src="js/backbone.js"&rt;&gt;/script&gt;
   
-  &lt;script src="js/twitterSearch.js"&rt;&lt;/script&rt;
+  &lt;script src="js/twitterSearch.js"&gt;&lt;/script&gt;
   
-  &lt;script&rt;
+  &lt;script&gt;
   
     $("div.twitter").twitterSearch({search: "CNN", searchBar: false});
     
-  &lt;/script&rt;`
+  &lt;/script&gt;`
   
 Usage
 ============================
@@ -44,15 +44,25 @@ There are a lot of options can be specified by passing a configuration object in
 `
   $(selector).twitterSearch({
     //Sent from the user @bbcNews
+    
     from: "bbcNews",
+    
     //The number of tweets to return per page
+    
     rpp: 30,
+    
     // Specifies what type of search results you would prefer to receive (mixed, recent, popular)
+    
     result_type: "recent",
+    
     //Append the search bar
+    
     searchBar: true,
+    
     //Don't use fadeOut effect to twitts
+    
     fadeEffect: false,
+    
   });
 `
 Examples

@@ -10,8 +10,11 @@ Includes different transition effects, pause-on-hover and auto-update features.
 Getting Started
 ==================================================
 Downloaddependence files: <a href="#">underscore.js</a> , <a href="">backbone.js</a>, <a href="#">query-1.9.1.js</a>
+
 Download the [production version](#) or [development version](https://github.com/kozlitinaelja/twitterSearch/blob/master/js/twitterSearch.js) of twitter search plugin
+
 Download [default styling](https://github.com/kozlitinaelja/twitterSearch/blob/master/twitter.css)
+
 Add in your html file:
 `
   &lt;div class="twitter"&rt;&lt;/div&rt;

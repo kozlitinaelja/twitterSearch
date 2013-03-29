@@ -17,21 +17,21 @@ Download [default styling](https://github.com/kozlitinaelja/twitterSearch/blob/m
 
 Add in your html file:
 `
-  &lt;div class="twitter"&gt;&lt;/div&gt;
-  
-  &lt;script src="js/underscore.js"&gt;&lt;/script&gt;
-  
-  &lt;script src="js/jquery-1.9.1.js"&gt;&lt;/script&gt;
-  
-  &lt;script src="js/backbone.js"&rt;&gt;/script&gt;
-  
-  &lt;script src="js/twitterSearch.js"&gt;&lt;/script&gt;
-  
-  &lt;script&gt;
-  
-    $("div.twitter").twitterSearch({search: "CNN", searchBar: false});
+    &lt;div class="twitter"&gt;&lt;/div&gt;
     
-  &lt;/script&gt;`
+    &lt;script src="js/underscore.js"&gt;&lt;/script&gt;
+    
+    &lt;script src="js/jquery-1.9.1.js"&gt;&lt;/script&gt;
+    
+    &lt;script src="js/backbone.js"&rt;&gt;/script&gt;
+    
+    &lt;script src="js/twitterSearch.js"&gt;&lt;/script&gt;
+    
+    &lt;script&gt;
+  
+      $("div.twitter").twitterSearch({search: "CNN", searchBar: false});
+    
+    &lt;/script&gt;`
   
 Usage
 ============================
@@ -63,7 +63,7 @@ There are a lot of options can be specified by passing a configuration object in
     
     fadeEffect: false,
     
-  });
+    });
 `
 Examples
 ===========================

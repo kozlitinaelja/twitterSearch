@@ -32,6 +32,7 @@ Add in your html file:
     $("div.twitter").twitterSearch({search: "CNN", searchBar: false});
     
   &lt;/script&rt;`
+  
 Usage
 ============================
 ###Simple usage:

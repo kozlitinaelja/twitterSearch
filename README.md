@@ -13,9 +13,8 @@ Download the [production version](#) or [development version](https://github.com
 Download [default styling](https://github.com/kozlitinaelja/twitterSearch/blob/master/twitter.css)
 
 Add in your html file:
-`
 
-    <div class="twitter"></div>;
+    `<div class="twitter"></div>;
     
     <script src="js/underscore.js"></script>
     
@@ -39,8 +38,8 @@ By simply passing a string performs a search with that string and provides basic
 Custom usage:
 ===============================
 There are a lot of options can be specified by passing a configuration object into the plugin, so code can look like:
-`
-  $(selector).twitterSearch({
+
+    `$(selector).twitterSearch({
     //Sent from the user @bbcNews
     
     from: "bbcNews",
@@ -61,8 +60,8 @@ There are a lot of options can be specified by passing a configuration object in
     
     fadeEffect: false,
     
-    });
-`
+    });`
+    
 Examples
 ===========================
 You can find some examples at [twitter search examples](hhtps://kozlitinaelja.github.com/twitterSearch.html)
